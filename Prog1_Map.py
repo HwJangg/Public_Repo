@@ -147,7 +147,7 @@ folium.PolyLine(
 ).add_to(world_map)
 
 # 7. 지도를 HTML 파일로 저장
-output_map = "Honeymoon_Map_No_Breaks.html"
+output_map = "index.html"
 world_map.save(output_map)
 
 print(f"지도 생성 완료: {output_map}")
