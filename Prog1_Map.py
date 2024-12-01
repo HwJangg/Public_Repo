@@ -58,6 +58,8 @@ if __name__ == "__main__":
 import pandas as pd
 import folium
 
+from folium import plugins
+
 # 1. 엑셀 파일 로드
 input_file = "Honeymoon_Locations_with_Coordinates.xlsx"  # 위도/경도 포함 엑셀 파일
 df = pd.read_excel(input_file)
@@ -67,14 +69,15 @@ world_map = folium.Map(location=[0, 0], zoom_start=2)
 
 # 3. 카테고리별 색상 설정
 color_dict = {
-    "공항": "blue",
-    "숙박": "green",
+    "공항": "darkblue",
+    "숙박": "darkpurple",
     "관광지": "red",
-    "기타": "purple"
+    "기타": "purple",
+    "경유": "gray"
 }
 
 # 4. 중복 숫자 마커 처리를 위한 설정
-offsets = [0, 20, 30, 40]  # 중복 마커의 숫자 위치를 조정하기 위한 오프셋 값
+offsets = [0, 20, 40, 60]  # 중복 마커의 숫자 위치를 조정하기 위한 오프셋 값
 seen_coordinates = {}
 
 # 5. 마커 추가
@@ -100,7 +103,7 @@ for idx, row in df.iterrows():
             font-size:14px;
             text-align:left;
             white-space:nowrap;
-            max-width:200px;">
+            max-width:500px;">
             {row['장소명']} ({category})
         </div>
         """
@@ -140,6 +143,14 @@ route_coords = df[['위도', '경도']].dropna().values.tolist()  # NaN 제거 �
 
 # 지도에 PolyLine 추가
 folium.PolyLine(
+    locations=route_coords,
+    color="blue",  # 경로 색상
+    weight=3,      # 선 두께
+    opacity=0.8    # 선 투명도
+).add_to(world_map)
+
+# 경로에 AntPath 추가
+plugins.AntPath(
     locations=route_coords,
     color="blue",  # 경로 색상
     weight=3,      # 선 두께
